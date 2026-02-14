@@ -10,6 +10,18 @@ export const PostMethod = async (route: any, bodies: any) => {
   }
 };
 
+
+export const PostMethodHead = async (route: any, bodies: any , headers : any) => {
+  try {
+    const { data } = await api.post(route, bodies , headers);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+
 export const GetMethod = async (route: any) => {
   try {
     const { data } = await api.get(route);

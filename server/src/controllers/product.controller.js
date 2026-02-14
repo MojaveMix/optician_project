@@ -58,7 +58,7 @@ const CreateProductController = async (req, res) => {
       selling_price,
       stock_quantity,
     } = req.body;
-    await CreateProducts([
+  const data =  await CreateProducts([
       name,
       category,
       brand,
@@ -68,7 +68,7 @@ const CreateProductController = async (req, res) => {
       selling_price,
       stock_quantity,
     ]);
-    res.json({ success: "Product created successfully" });
+    res.json({id : data});
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: "Internale server problem" });

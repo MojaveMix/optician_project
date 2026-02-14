@@ -5,4 +5,5 @@ AppRouter.use("/products", require("./product.routes"));
 AppRouter.use("/customers", require("./customers.route"));
 AppRouter.use("/prescriptions", require("./prescription.route"));
 AppRouter.use("/orders", require("./order.routes"));
+AppRouter.use("/payments", require("./payment.route"));
 module.exports = AppRouter;

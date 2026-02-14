@@ -21,7 +21,7 @@ export interface User {
 
 export interface Product {
   id: string;
-  shop_id: string;
+  img_path: string;
   name: string;
   category: 'FRAME' | 'LENS' | 'SUNGLASSES' | 'ACCESSORY';
   brand: string;
@@ -139,7 +139,7 @@ export const users: User[] = [
 export const products: Product[] = [
   {
     id: '1',
-    shop_id: '1',
+    img_path : "",
     name: 'Ray-Ban Aviator Classic',
     category: 'SUNGLASSES',
     brand: 'Ray-Ban',
@@ -155,7 +155,7 @@ export const products: Product[] = [
   },
   {
     id: '2',
-    shop_id: '1',
+    img_path : "",
     name: 'Oakley Rectangular Frame',
     category: 'FRAME',
     brand: 'Oakley',
@@ -171,7 +171,7 @@ export const products: Product[] = [
   },
   {
     id: '3',
-    shop_id: '1',
+    img_path: '1',
     name: 'Progressive Lens',
     category: 'LENS',
     brand: 'Essilor',
@@ -187,7 +187,7 @@ export const products: Product[] = [
   },
   {
     id: '4',
-    shop_id: '1',
+    img_path: '1',
     name: 'Blue Light Blocking Lens',
     category: 'LENS',
     brand: 'Zeiss',
@@ -203,7 +203,7 @@ export const products: Product[] = [
   },
   {
     id: '5',
-    shop_id: '1',
+    img_path: '1',
     name: 'Gucci Square Frame',
     category: 'FRAME',
     brand: 'Gucci',
@@ -219,7 +219,7 @@ export const products: Product[] = [
   },
   {
     id: '6',
-    shop_id: '1',
+    img_path: '1',
     name: 'Lens Cleaning Kit',
     category: 'ACCESSORY',
     brand: 'Zeiss',
@@ -235,7 +235,7 @@ export const products: Product[] = [
   },
   {
     id: '7',
-    shop_id: '1',
+    img_path: '1',
     name: 'Polarized Sports Sunglasses',
     category: 'SUNGLASSES',
     brand: 'Oakley',
@@ -251,7 +251,7 @@ export const products: Product[] = [
   },
   {
     id: '8',
-    shop_id: '1',
+    img_path: '1',
     name: 'Kids Round Frame',
     category: 'FRAME',
     brand: 'Disney',

@@ -128,7 +128,7 @@ export default function Orders() {
     fetchAllOrders();
   };
 
-  const handlePayment = () => {
+  const handlePayment = async() => {
     if (!selectedOrder) return;
 
     addPayment({
@@ -137,9 +137,20 @@ export default function Orders() {
       payment_method: paymentMethod,
       payment_date: new Date().toISOString(),
     });
+      
+  //  const data = await PostMethod('/payments/create' , {
+  //     order_id: selectedOrder.id,
+  //     amount: selectedOrder.total_price,
+  //     payment_method: paymentMethod,
+  //   })
+   
+  // if(data){
+  //   await handleStatusChange(selectedOrder.id , "DELIVERED")
+  // }
+  if (selectedOrder.status === "PENDING") {
+      console.log("ENTRED")
+       await handleStatusChange(selectedOrder.id, "READY");
 
-    if (selectedOrder.status === "PENDING") {
-      updateOrderStatus(selectedOrder.id, "READY");
     }
 
     setIsPaymentModalOpen(false);

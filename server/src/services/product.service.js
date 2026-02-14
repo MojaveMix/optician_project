@@ -1,4 +1,4 @@
-const { QuerySql } = require("./query.service");
+const { QuerySql, QuerySqlInsertedId } = require("./query.service");
 
 const showAllProducts = async () => {
   try {
@@ -27,7 +27,7 @@ const updateProducts = async (params = []) => {
 
 const CreateProducts = async (params = []) => {
   try {
-    const data = await QuerySql(
+    const data = await QuerySqlInsertedId(
       "INSERT INTO products (name, category, brand, model, barcode, purchase_price, selling_price, stock_quantity) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
       params,
     );
