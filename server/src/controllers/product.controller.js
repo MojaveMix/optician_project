@@ -26,7 +26,8 @@ const UpdateProductController = async (req, res) => {
       purchase_price,
       selling_price,
       stock_quantity,
-      min_stock
+      min_stock,
+      description
     } = req.body;
     if (!id) res.status(401).send("User not found");
     await updateProducts([
@@ -39,6 +40,7 @@ const UpdateProductController = async (req, res) => {
       selling_price,
       stock_quantity,
       min_stock,
+      description,
       id,
     ]);
     res.json({ success: "Product updated successfully" });
@@ -59,7 +61,8 @@ const CreateProductController = async (req, res) => {
       purchase_price,
       selling_price,
       stock_quantity,
-      min_stock
+      min_stock,
+      description
     } = req.body;
   const data =  await CreateProducts([
       name,
@@ -70,7 +73,8 @@ const CreateProductController = async (req, res) => {
       purchase_price,
       selling_price,
       stock_quantity,
-      min_stock
+      min_stock,
+      description
     ]);
     res.json({id : data});
   } catch (error) {

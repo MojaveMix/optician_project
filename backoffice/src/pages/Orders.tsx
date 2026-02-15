@@ -87,9 +87,9 @@ export default function Orders() {
       status: "PENDING",
     });
 
-    const product = products.find(
-      (p) => parseInt(p.id) === parseInt(selectedProductId),
-    );
+    // const product = products.find(
+    //   (p) => parseInt(p.id) === parseInt(selectedProductId),
+    // );
 
     // if (data.id && product && product.selling_price) {
     //   await PostMethod("/orders/items/create", {

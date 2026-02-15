@@ -10,6 +10,7 @@ import Input from "../components/Input";
 import Select from "../components/Select";
 import Badge from "../components/Badge";
 import { GetMethod, PostMethod, PostMethodHead, PutMethod } from "../api/methods";
+import Textarea from "../components/Textarea";
 
 export default function Products() {
   const { deleteProduct } = useApp();
@@ -31,6 +32,7 @@ export default function Products() {
     selling_price: 0,
     stock_quantity: 0,
     min_stock: 0,
+    description :  ""
   });
 
   const fetchAllProducts = useCallback(async () => {
@@ -129,6 +131,8 @@ export default function Products() {
       selling_price: product.selling_price,
       stock_quantity: product.stock_quantity,
       min_stock: product.min_stock,
+    description :  product.description
+
     });
     setIsEditModalOpen(true);
   };
@@ -152,6 +156,8 @@ export default function Products() {
       selling_price: 0,
       stock_quantity: 0,
       min_stock: 0,
+    description :  ""
+
     });
   };
 
@@ -493,6 +499,16 @@ const columns = [
             }
             required
           />
+
+
+           <Textarea
+            label="Description"
+            value={formData.description}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+            required
+          />
         </div>
         <div className="flex gap-3 mt-6">
           <Button onClick={handleAdd} className="flex-1">
@@ -625,7 +641,7 @@ const columns = [
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                {formData.img_path.name} {/* Fixed: was formData.img_path instead of formData.img_path.name */}
+                {formData.img_path?.name} {/* Fixed: was formData.img_path instead of formData.img_path.name */}
               </div>
             )}
             
@@ -753,6 +769,15 @@ const columns = [
             value={formData.min_stock}
             onChange={(e) =>
               setFormData({ ...formData, min_stock: parseInt(e.target.value) })
+            }
+            required
+          />
+
+              <Textarea
+            label="Description"
+            value={formData.description}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
             }
             required
           />

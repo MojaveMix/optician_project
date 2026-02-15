@@ -14,7 +14,7 @@ const showAllProducts = async () => {
 const updateProducts = async (params = []) => {
   try {
     const data = await QuerySql(
-      "update products set name = ? , category = ? , brand = ? , model = ? , barcode=? , purchase_price= ? , selling_price= ? , stock_quantity = ? , min_stock = ? where id = ?",
+      "update products set name = ? , category = ? , brand = ? , model = ? , barcode=? , purchase_price= ? , selling_price= ? , stock_quantity = ? , min_stock = ? , description = ? where id = ?",
       params,
     );
     console.log(params);
@@ -28,7 +28,7 @@ const updateProducts = async (params = []) => {
 const CreateProducts = async (params = []) => {
   try {
     const data = await QuerySqlInsertedId(
-      "INSERT INTO products (name, category, brand, model, barcode, purchase_price, selling_price, stock_quantity , min_stock) VALUES(?, ?, ?, ?, ?, ?, ?, ? , ?)",
+      "INSERT INTO products (name, category, brand, model, barcode, purchase_price, selling_price, stock_quantity , min_stock , description) VALUES(?, ?, ?, ?, ?, ?, ?, ? , ? , ?)",
       params,
     );
 

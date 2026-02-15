@@ -33,6 +33,7 @@ export interface Product {
   selling_price: number;
   stock_quantity: number;
   min_stock: number;
+  description :  string ;
   created_at: string;
 }
 
@@ -151,6 +152,7 @@ export const products: Product[] = [
     selling_price: 159.99,
     stock_quantity: 15,
     min_stock: 5,
+    description : "",
     created_at: '2024-01-20T10:00:00Z',
   },
   {
@@ -167,6 +169,7 @@ export const products: Product[] = [
     selling_price: 229.99,
     stock_quantity: 3,
     min_stock: 5,
+    description : "",
     created_at: '2024-01-25T10:00:00Z',
   },
   {
@@ -183,6 +186,7 @@ export const products: Product[] = [
     selling_price: 189.99,
     stock_quantity: 25,
     min_stock: 10,
+    description : "",
     created_at: '2024-02-01T10:00:00Z',
   },
   {
@@ -199,6 +203,8 @@ export const products: Product[] = [
     selling_price: 89.99,
     stock_quantity: 18,
     min_stock: 15,
+    description : "",
+
     created_at: '2024-02-05T10:00:00Z',
   },
   {
@@ -215,6 +221,8 @@ export const products: Product[] = [
     selling_price: 349.99,
     stock_quantity: 8,
     min_stock: 3,
+    description : "",
+
     created_at: '2024-02-10T10:00:00Z',
   },
   {
@@ -231,6 +239,8 @@ export const products: Product[] = [
     selling_price: 19.99,
     stock_quantity: 45,
     min_stock: 20,
+    description : "",
+
     created_at: '2024-02-12T10:00:00Z',
   },
   {
@@ -247,6 +257,8 @@ export const products: Product[] = [
     selling_price: 179.99,
     stock_quantity: 2,
     min_stock: 5,
+    description : "",
+
     created_at: '2024-02-15T10:00:00Z',
   },
   {
@@ -263,6 +275,8 @@ export const products: Product[] = [
     selling_price: 69.99,
     stock_quantity: 12,
     min_stock: 8,
+    description : "",
+
     created_at: '2024-02-18T10:00:00Z',
   },
 ];
