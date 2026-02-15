@@ -26,7 +26,7 @@ const CreateOrder = async (bodies = []) => {
 const CreateOrderItems = async (bodies = []) => {
   try {
     const data = await QuerySql(
-      "INSERT INTO  orders (order_id ,	product_id	, quantity ,	price) VALUES(? ,  ?  ,  ? , ?)",
+      "INSERT INTO   order_items (order_id ,	product_id	, quantity ,	price) VALUES(? ,  ?  ,  ? , ?)",
       bodies,
     );
     return data ? data : null;

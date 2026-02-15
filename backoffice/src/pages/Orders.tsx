@@ -22,8 +22,6 @@ export default function Orders() {
     customers,
     products,
     orderItems,
-    updateOrderStatus,
-    addPayment,
     fetchAllOrders,
   } = useApp();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -42,7 +40,6 @@ export default function Orders() {
     const product = products.find(
       (p) => parseInt(p.id) === parseInt(selectedProductId),
     );
-    console.log(products);
     if (!product) return;
 
     const existingItem = cart.find(
@@ -67,6 +64,8 @@ export default function Orders() {
         },
       ]);
     }
+     
+   
 
     setSelectedProductId("");
     setQuantity(1);
@@ -92,25 +91,23 @@ export default function Orders() {
       (p) => parseInt(p.id) === parseInt(selectedProductId),
     );
 
-    if (data.id && product && product.selling_price) {
-      await PostMethod("/orders/items/create", {
-        product_id: selectedProductId,
-        quantity,
-        price: (product && product.selling_price) || null,
+    // if (data.id && product && product.selling_price) {
+    //   await PostMethod("/orders/items/create", {
+    //     product_id: selectedProductId,
+    //     quantity,
+    //     price: (product && product.selling_price) || null,
+    //     order_id: data.id,
+    //   });
+    // }
+     cart.forEach(async(item)=>{
+        await PostMethod("/orders/items/create", {
+        product_id: item.product_id,
+        quantity : item.quantity,
+        price: item.price,
         order_id: data.id,
       });
-    }
+     });
     fetchAllOrders();
-    // addOrder(
-    //   {
-    //     shop_id: "1",
-    //     customer_id: customerId,
-    //     total_price: totalAmount,
-    //     status: "PENDING",
-    //   },
-    //   cart,
-    // );
-
     setIsCreateModalOpen(false);
     setCustomerId("");
     setCart([]);
@@ -129,33 +126,35 @@ export default function Orders() {
   };
 
   const handlePayment = async() => {
-    if (!selectedOrder) return;
+    try {
+         if (!selectedOrder) return;
 
-    addPayment({
+    // addPayment({
+    //   order_id: selectedOrder.id,
+    //   amount: selectedOrder.total_price,
+    //   payment_method: paymentMethod,
+    //   payment_date: new Date().toISOString(),
+    // });
+      
+  const data =  await PostMethod('/payments/create' , {
       order_id: selectedOrder.id,
       amount: selectedOrder.total_price,
       payment_method: paymentMethod,
-      payment_date: new Date().toISOString(),
-    });
-      
-  //  const data = await PostMethod('/payments/create' , {
-  //     order_id: selectedOrder.id,
-  //     amount: selectedOrder.total_price,
-  //     payment_method: paymentMethod,
-  //   })
-   
-  // if(data){
-  //   await handleStatusChange(selectedOrder.id , "DELIVERED")
-  // }
-  if (selectedOrder.status === "PENDING") {
-      console.log("ENTRED")
-       await handleStatusChange(selectedOrder.id, "READY");
-
+    })
+  if(data){
+    if (selectedOrder.status === "PENDING") {
+        console.log("ENTRED")
+         await handleStatusChange(selectedOrder.id, "READY");
+  
+      }
+  
+      setIsPaymentModalOpen(false);
+      setSelectedOrder(null);
+      setPaymentMethod("CASH");
+  }
+    } catch (error) {
+      console.error(error)
     }
-
-    setIsPaymentModalOpen(false);
-    setSelectedOrder(null);
-    setPaymentMethod("CASH");
   };
 
   const ordersWithDetails = useMemo(() => {

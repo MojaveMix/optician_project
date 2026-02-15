@@ -602,14 +602,12 @@ const columns = [
                   e.target.value = ""; // reset input
                   return;
                 }
-
-                // Set new image file
                 setFormData((prev) => ({
                   ...prev,
                   img_path: file, // File object
                 }));
               }}
-            />
+            />  
 
             <label
               htmlFor="edit-image-upload"
@@ -749,7 +747,15 @@ const columns = [
             }
             required
           />
-        
+          <Input
+            label="Minimum Stock"
+            type="number"
+            value={formData.min_stock}
+            onChange={(e) =>
+              setFormData({ ...formData, min_stock: parseInt(e.target.value) })
+            }
+            required
+          />
         </div>
         
   <div className="flex gap-3 mt-6">

@@ -316,7 +316,7 @@ export default function Customers() {
                         </div>
                         <div className="text-right">
                           <p className="font-semibold text-lg">
-                            ${order.total_price.toFixed(2)}
+                            ${order.total_price}
                           </p>
                           <Badge variant={statusVariant}>{order.status}</Badge>
                         </div>

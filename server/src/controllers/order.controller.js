@@ -5,6 +5,7 @@ const {
   CreateOrderItems,
   showOrderItems,
 } = require("../services/order.service");
+const { QuerySql } = require("../services/query.service");
 
 const showAllOrdersController = async (req, res) => {
   try {
@@ -18,10 +19,9 @@ const showAllOrdersController = async (req, res) => {
 
 const updateOrdersController = async (req, res) => {
   try {
-    const { id, status, order_id } = req.body;
-    if (status === "DELIVERED") {
-      await updateOrder([status, id]);
-    }
+    const { id, status} = req.body;
+    
+    await updateOrder([status, id]);
     //     await QuerySql(
     //   "UPDATE orders SET status = ? where id = ?",
     //   bodies,
@@ -47,7 +47,15 @@ const createOrdersController = async (req, res) => {
 const createOrdersItemsController = async (req, res) => {
   try {
     const { order_id, product_id, quantity, price } = req.body;
-    await CreateOrderItems([order_id, product_id, quantity, price]);
+   
+    const data = await QuerySql('SELECT * FROM  order_items where order_id = ? and product_id = ?' ,[order_id, product_id])
+    if (data.length > 0){
+       
+      await QuerySql('UPDATE order_items SET quantity = ?  where order_id = ? and product_id = ?' , [quantity , order_id, product_id])
+
+    }else {
+      await CreateOrderItems([order_id, product_id, quantity, price]);
+    }
     return res.json({ success: "Order item created successfully" });
   } catch (error) {
     console.error(error);

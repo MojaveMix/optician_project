@@ -39,7 +39,7 @@ export default function Reports() {
 
     return Array.from(productSales.entries())
       .map(([productId, quantity]) => {
-        const product = products.find((p) => p.id === productId);
+        const product = products.find((p) => Number(p.id) === Number(productId));
         return { product, quantity };
       })
       .filter((item) => item.product !== undefined)
@@ -49,18 +49,18 @@ export default function Reports() {
 
   const lowStockProducts = useMemo(() => {
     return products
-      .filter((p) => p.stock_quantity <= p.min_stock)
-      .sort((a, b) => a.stock_quantity - b.stock_quantity);
+      .filter((p) => Number( p.stock_quantity) <= Number(p.min_stock))
+      .sort((a, b) => Number(a.stock_quantity) - Number(b.stock_quantity));
   }, [products]);
 
   const categoryRevenue = useMemo(() => {
     const categoryMap = new Map<string, number>();
 
     orderItems.forEach((item) => {
-      const product = products.find((p) => p.id === item.product_id);
+      const product = products.find((p) => Number(p.id) === Number(item.product_id));
       if (product) {
         const current = categoryMap.get(product.category) || 0;
-        categoryMap.set(product.category, current + item.price * item.quantity);
+        categoryMap.set(product.category, current + Number(item.price) * Number(item.quantity));
       }
     });
 
@@ -129,7 +129,7 @@ export default function Reports() {
             <div>
               <p className="text-sm text-gray-500 mb-1">Daily Revenue</p>
               <p className="text-2xl font-bold text-gray-800">
-                ${stats.dailyRevenue.toFixed(2)}
+                ${stats.dailyRevenue}
               </p>
             </div>
             <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
@@ -143,7 +143,7 @@ export default function Reports() {
             <div>
               <p className="text-sm text-gray-500 mb-1">Monthly Revenue</p>
               <p className="text-2xl font-bold text-gray-800">
-                ${stats.monthlyRevenue.toFixed(2)}
+                ${stats.monthlyRevenue}
               </p>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -157,7 +157,7 @@ export default function Reports() {
             <div>
               <p className="text-sm text-gray-500 mb-1">Total Revenue</p>
               <p className="text-2xl font-bold text-gray-800">
-                ${stats.totalRevenue.toFixed(2)}
+                ${stats.totalRevenue}
               </p>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -195,7 +195,7 @@ export default function Reports() {
                       {item.category}
                     </span>
                     <span className="text-sm font-semibold text-gray-900">
-                      ${item.revenue.toFixed(2)}
+                      ${item.revenue}
                     </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
@@ -234,7 +234,7 @@ export default function Reports() {
                       {method} ({count} transactions)
                     </span>
                     <span className="text-sm font-semibold text-gray-900">
-                      ${amount.toFixed(2)}
+                      ${amount}
                     </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">

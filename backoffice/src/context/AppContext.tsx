@@ -119,6 +119,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
     fetchAllProducts();
   }, [fetchAllProducts]);
 
+
+  
+  const fetchAllPayments = useCallback(async () => {
+    try {
+      const data = await GetMethod("/payments/all");
+      setPayments(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAllPayments();
+  }, [fetchAllPayments]);
+
   const addProduct = (product: Omit<Product, "id" | "created_at">) => {
     const newProduct: Product = {
       ...product,
