@@ -1,10 +1,10 @@
-import { useMemo } from 'react';
-import { TrendingUp, DollarSign, Package, AlertTriangle } from 'lucide-react';
-import { useApp } from '../context/AppContext';
-import Card from '../components/Card';
-import Table from '../components/Table';
-import Badge from '../components/Badge';
-import { Product } from '../data/mockData';
+import { useMemo } from "react";
+import { TrendingUp, DollarSign, Package, AlertTriangle } from "lucide-react";
+import { useApp } from "../context/AppContext";
+import Card from "../components/Card";
+import Table from "../components/Table";
+import Badge from "../components/Badge";
+import { Product } from "../data/mockData";
 
 export default function Reports() {
   const { orders, products, orderItems, payments } = useApp();
@@ -12,7 +12,11 @@ export default function Reports() {
   const stats = useMemo(() => {
     const today = new Date();
     const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const startOfDay = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
 
     const dailyRevenue = payments
       .filter((p) => new Date(p.payment_date) >= startOfDay)
@@ -24,7 +28,9 @@ export default function Reports() {
 
     const totalRevenue = payments.reduce((sum, p) => sum + p.amount, 0);
 
-    const deliveredOrders = orders.filter((o) => o.status === 'DELIVERED').length;
+    const deliveredOrders = orders.filter(
+      (o) => o.status === "DELIVERED",
+    ).length;
 
     return { dailyRevenue, monthlyRevenue, totalRevenue, deliveredOrders };
   }, [orders, payments]);
@@ -39,7 +45,9 @@ export default function Reports() {
 
     return Array.from(productSales.entries())
       .map(([productId, quantity]) => {
-        const product = products.find((p) => Number(p.id) === Number(productId));
+        const product = products.find(
+          (p) => Number(p.id) === Number(productId),
+        );
         return { product, quantity };
       })
       .filter((item) => item.product !== undefined)
@@ -49,7 +57,7 @@ export default function Reports() {
 
   const lowStockProducts = useMemo(() => {
     return products
-      .filter((p) => Number( p.stock_quantity) <= Number(p.min_stock))
+      .filter((p) => Number(p.stock_quantity) <= Number(p.min_stock))
       .sort((a, b) => Number(a.stock_quantity) - Number(b.stock_quantity));
   }, [products]);
 
@@ -57,10 +65,15 @@ export default function Reports() {
     const categoryMap = new Map<string, number>();
 
     orderItems.forEach((item) => {
-      const product = products.find((p) => Number(p.id) === Number(item.product_id));
+      const product = products.find(
+        (p) => Number(p.id) === Number(item.product_id),
+      );
       if (product) {
         const current = categoryMap.get(product.category) || 0;
-        categoryMap.set(product.category, current + Number(item.price) * Number(item.quantity));
+        categoryMap.set(
+          product.category,
+          current + Number(item.price) * Number(item.quantity),
+        );
       }
     });
 
@@ -71,24 +84,23 @@ export default function Reports() {
 
   const bestSellingColumns = [
     {
-      header: 'Rank',
+      header: "Rank",
       accessor: (_: unknown, index?: number) => `#${(index || 0) + 1}`,
     },
     {
-      header: 'Product',
+      header: "Product",
       accessor: (row: (typeof bestSellingProducts)[0]) => row.product?.name,
     },
     {
-      header: 'Brand',
+      header: "Brand",
       accessor: (row: (typeof bestSellingProducts)[0]) => row.product?.brand,
     },
     {
-      header: 'Category',
-      accessor: (row: (typeof bestSellingProducts)[0]) =>
-        row.product?.category,
+      header: "Category",
+      accessor: (row: (typeof bestSellingProducts)[0]) => row.product?.category,
     },
     {
-      header: 'Units Sold',
+      header: "Units Sold",
       accessor: (row: (typeof bestSellingProducts)[0]) => (
         <span className="font-semibold">{row.quantity}</span>
       ),
@@ -96,21 +108,21 @@ export default function Reports() {
   ];
 
   const lowStockColumns = [
-    { header: 'Product', accessor: 'name' as keyof Product },
-    { header: 'Brand', accessor: 'brand' as keyof Product },
-    { header: 'Category', accessor: 'category' as keyof Product },
+    { header: "Product", accessor: "name" as keyof Product },
+    { header: "Brand", accessor: "brand" as keyof Product },
+    { header: "Category", accessor: "category" as keyof Product },
     {
-      header: 'Current Stock',
+      header: "Current Stock",
       accessor: (row: Product) => (
         <Badge variant="danger">{row.stock_quantity}</Badge>
       ),
     },
     {
-      header: 'Min Stock',
-      accessor: 'min_stock' as keyof Product,
+      header: "Min Stock",
+      accessor: "min_stock" as keyof Product,
     },
     {
-      header: 'Needed',
+      header: "Needed",
       accessor: (row: Product) => (
         <span className="font-semibold text-red-600">
           {row.min_stock - row.stock_quantity}
@@ -121,7 +133,9 @@ export default function Reports() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Reports & Analytics</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-8 mt-6">
+        Reports & Analytics
+      </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card>
@@ -129,7 +143,7 @@ export default function Reports() {
             <div>
               <p className="text-sm text-gray-500 mb-1">Daily Revenue</p>
               <p className="text-2xl font-bold text-gray-800">
-                ${stats.dailyRevenue}
+                $ {parseFloat(String(stats?.dailyRevenue || 0)).toFixed(2)}
               </p>
             </div>
             <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
@@ -143,7 +157,7 @@ export default function Reports() {
             <div>
               <p className="text-sm text-gray-500 mb-1">Monthly Revenue</p>
               <p className="text-2xl font-bold text-gray-800">
-                ${stats.monthlyRevenue}
+                ${parseFloat(String(stats?.monthlyRevenue || 0)).toFixed(2)}
               </p>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -157,7 +171,7 @@ export default function Reports() {
             <div>
               <p className="text-sm text-gray-500 mb-1">Total Revenue</p>
               <p className="text-2xl font-bold text-gray-800">
-                ${stats.totalRevenue}
+                {parseFloat(String(stats?.totalRevenue || 0)).toFixed(2)}
               </p>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -185,7 +199,9 @@ export default function Reports() {
         <Card title="Revenue by Category">
           <div className="space-y-4">
             {categoryRevenue.map((item) => {
-              const maxRevenue = Math.max(...categoryRevenue.map((c) => c.revenue));
+              const maxRevenue = Math.max(
+                ...categoryRevenue.map((c) => c.revenue),
+              );
               const percentage = (item.revenue / maxRevenue) * 100;
 
               return (
@@ -212,18 +228,21 @@ export default function Reports() {
 
         <Card title="Payment Methods">
           <div className="space-y-4">
-            {['CASH', 'CARD', 'TRANSFER'].map((method) => {
+            {["CASH", "CARD", "TRANSFER"].map((method) => {
               const methodPayments = payments.filter(
-                (p) => p.payment_method === method
+                (p) => p.payment_method === method,
               );
-              const amount = methodPayments.reduce((sum, p) => sum + p.amount, 0);
+              const amount = methodPayments.reduce(
+                (sum, p) => sum + p.amount,
+                0,
+              );
               const count = methodPayments.length;
               const maxAmount = Math.max(
-                ...['CASH', 'CARD', 'TRANSFER'].map((m) =>
+                ...["CASH", "CARD", "TRANSFER"].map((m) =>
                   payments
                     .filter((p) => p.payment_method === m)
-                    .reduce((sum, p) => sum + p.amount, 0)
-                )
+                    .reduce((sum, p) => sum + p.amount, 0),
+                ),
               );
               const percentage = maxAmount > 0 ? (amount / maxAmount) * 100 : 0;
 

@@ -2,7 +2,18 @@ const { QuerySql, QuerySqlInsertedId } = require("./query.service");
 
 const showAllProducts = async () => {
   try {
-    const data = await QuerySql("SELECT * FROM products");
+    const data = await QuerySql("SELECT * FROM products where casher > 0");
+
+    return data ? data : null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+const showProductById = async (params = []) => {
+  try {
+    const data = await QuerySql("SELECT * FROM products where id = ?", params);
 
     return data ? data : null;
   } catch (error) {
@@ -39,6 +50,9 @@ const CreateProducts = async (params = []) => {
   }
 };
 
-
-
-module.exports = { showAllProducts, updateProducts, CreateProducts };
+module.exports = {
+  showAllProducts,
+  updateProducts,
+  CreateProducts,
+  showProductById,
+};

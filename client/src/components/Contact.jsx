@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 
 export default function Contact() {
   return (
@@ -16,7 +16,9 @@ export default function Contact() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="space-y-8">
             <div className="bg-white rounded-xl shadow-lg p-8">
-              <h3 className="text-2xl font-bold text-[#1E3A8A] mb-6">Contact Information</h3>
+              <h3 className="text-2xl font-bold text-[#1E3A8A] mb-6">
+                Contact Information
+              </h3>
 
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
@@ -24,7 +26,9 @@ export default function Contact() {
                     <MapPin className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Address</h4>
+                    <h4 className="font-semibold text-gray-900 mb-1">
+                      Address
+                    </h4>
                     <p className="text-gray-600">123 Boulevard Mohammed V</p>
                     <p className="text-gray-600">Casablanca, Morocco</p>
                   </div>
@@ -57,8 +61,12 @@ export default function Contact() {
                     <Clock className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Opening Hours</h4>
-                    <p className="text-gray-600">Monday - Friday: 9:00 AM - 7:00 PM</p>
+                    <h4 className="font-semibold text-gray-900 mb-1">
+                      Opening Hours
+                    </h4>
+                    <p className="text-gray-600">
+                      Monday - Friday: 9:00 AM - 7:00 PM
+                    </p>
                     <p className="text-gray-600">Saturday: 9:00 AM - 5:00 PM</p>
                     <p className="text-gray-600">Sunday: Closed</p>
                   </div>
@@ -67,14 +75,22 @@ export default function Contact() {
             </div>
 
             <div className="bg-green-50 border-2 border-green-500 rounded-xl p-6">
-              <h4 className="font-bold text-green-900 mb-2">Order via WhatsApp</h4>
+              <h4 className="font-bold text-green-900 mb-2">
+                Order via WhatsApp
+              </h4>
               <p className="text-green-800 mb-4">
-                Browse our products and order directly through WhatsApp for quick and easy service!
+                Browse our products and order directly through WhatsApp for
+                quick and easy service!
               </p>
               <button
                 onClick={() => {
-                  const message = encodeURIComponent("Hello! I'd like to learn more about your products.");
-                  window.open(`https://wa.me/212600000000?text=${message}`, '_blank');
+                  const message = encodeURIComponent(
+                    "Hello! I'd like to learn more about your products.",
+                  );
+                  window.open(
+                    `https://wa.me/212645134395?text=${message}`,
+                    "_blank",
+                  );
                 }}
                 className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors w-full"
               >

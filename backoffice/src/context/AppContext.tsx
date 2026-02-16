@@ -21,7 +21,8 @@ import {
   payments as initialPayments,
 } from "../data/mockData";
 import { ToastType } from "../components/Toast";
-import { GetMethod } from "../api/methods";
+import { GetMethod, PutMethod } from "../api/methods";
+import { useAuth } from "./AuthContext";
 
 interface ToastState {
   message: string;
@@ -58,6 +59,7 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
+  const { isAuthenticated } = useAuth();
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
   const [prescriptions, setPrescriptions] =
@@ -69,8 +71,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const fetchAllOrdersItems = useCallback(async () => {
     try {
-      const data = await GetMethod("/orders/items/all");
-      setOrderItems(data);
+      if (isAuthenticated) {
+        const data = await GetMethod("/orders/items/all");
+        setOrderItems(data);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -82,8 +86,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const fetchAllCustomers = useCallback(async () => {
     try {
-      const data = await GetMethod("/customers/all");
-      setCustomers(data);
+      if (isAuthenticated) {
+        const data = await GetMethod("/customers/all");
+        setCustomers(data);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -95,8 +101,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const fetchAllOrders = useCallback(async () => {
     try {
-      const data = await GetMethod("/orders/all");
-      setOrders(data);
+      if (isAuthenticated) {
+        const data = await GetMethod("/orders/all");
+        setOrders(data);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -108,8 +116,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const fetchAllProducts = useCallback(async () => {
     try {
-      const data = await GetMethod("/products/all");
-      setProducts(data);
+      if (isAuthenticated) {
+        const data = await GetMethod("/products/all");
+        setProducts(data);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -119,12 +129,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     fetchAllProducts();
   }, [fetchAllProducts]);
 
-
-  
   const fetchAllPayments = useCallback(async () => {
     try {
-      const data = await GetMethod("/payments/all");
-      setPayments(data);
+      if (isAuthenticated) {
+        const data = await GetMethod("/payments/all");
+        setPayments(data);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -149,8 +159,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     showToast("Product updated successfully", "success");
   };
 
-  const deleteProduct = (id: string) => {
-    setProducts(products.filter((p) => p.id !== id));
+  const deleteProduct = async (id: string) => {
+    await PutMethod("/products/delete", {
+      id,
+    });
+    // setProducts(products.filter((p) => p.id !== id));
     showToast("Product deleted successfully", "success");
   };
 

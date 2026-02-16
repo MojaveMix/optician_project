@@ -1,22 +1,19 @@
-import { useState } from 'react';
-import { Search } from 'lucide-react';
-import ProductCard from './ProductCard';
-import { useAppContext } from '../context/AppContext';
-
+import { useState } from "react";
+import { Search } from "lucide-react";
+import ProductCard from "./ProductCard";
+import { useAppContext } from "../context/AppContext";
 
 const ProductGrid = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('ALL');
-  const  {products } = useAppContext()
-
-
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("ALL");
+  const { products } = useAppContext();
 
   const filteredProducts = products.filter((product) => {
     const matchesSearch =
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.brand.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'ALL' || product.category === selectedCategory;
+    const matchesCategory =
+      selectedCategory === "ALL" || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -24,9 +21,12 @@ const ProductGrid = () => {
     <section id="products" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Premium Collection</h2>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Our Premium Collection
+          </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Discover our carefully curated selection of premium eyewear designed for style and comfort.
+            Discover our carefully curated selection of premium eyewear designed
+            for style and comfort.
           </p>
         </div>
 
@@ -44,31 +44,31 @@ const ProductGrid = () => {
 
           <div className="flex gap-2">
             <button
-              onClick={() => setSelectedCategory('ALL')}
+              onClick={() => setSelectedCategory("ALL")}
               className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                selectedCategory === 'ALL'
-                  ? 'bg-[#1E3A8A] text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                selectedCategory === "ALL"
+                  ? "bg-[#1E3A8A] text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               All Products
             </button>
             <button
-              onClick={() => setSelectedCategory('FRAME')}
+              onClick={() => setSelectedCategory("FRAME")}
               className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                selectedCategory === 'FRAME'
-                  ? 'bg-[#1E3A8A] text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                selectedCategory === "FRAME"
+                  ? "bg-[#1E3A8A] text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               Frames
             </button>
             <button
-              onClick={() => setSelectedCategory('SUNGLASSES')}
+              onClick={() => setSelectedCategory("SUNGLASSES")}
               className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                selectedCategory === 'SUNGLASSES'
-                  ? 'bg-[#1E3A8A] text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                selectedCategory === "SUNGLASSES"
+                  ? "bg-[#1E3A8A] text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               Sunglasses
@@ -79,7 +79,8 @@ const ProductGrid = () => {
         {filteredProducts.length > 0 ? (
           <>
             <div className="mb-4 text-gray-600">
-              Showing {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''}
+              Showing {filteredProducts.length} product
+              {filteredProducts.length !== 1 ? "s" : ""}
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredProducts.map((product) => (
@@ -89,11 +90,13 @@ const ProductGrid = () => {
           </>
         ) : (
           <div className="text-center py-16">
-            <p className="text-xl text-gray-600">No products found matching your criteria.</p>
+            <p className="text-xl text-gray-600">
+              No products found matching your criteria.
+            </p>
             <button
               onClick={() => {
-                setSearchTerm('');
-                setSelectedCategory('ALL');
+                setSearchTerm("");
+                setSelectedCategory("ALL");
               }}
               className="mt-4 text-[#3B82F6] hover:text-[#1E3A8A] font-semibold"
             >

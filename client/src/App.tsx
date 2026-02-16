@@ -1,24 +1,19 @@
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import ProductGrid from './components/ProductGrid';
-import About from './components/About';
-import WhyChooseUs from './components/WhyChooseUs';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
-import FloatingWhatsApp from './components/FloatingWhatsApp';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import ProductPage from './pages/ProductPage';
+import AppContextProvider from './context/AppContext';
+
 
 function App() {
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      <Hero />
-      <ProductGrid />
-      <About />
-      <WhyChooseUs />
-      <Contact />
-      <Footer />
-      <FloatingWhatsApp />
-    </div>
+    <AppContextProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/product/:id" element={<ProductPage />} />
+        </Routes>
+      </Router>
+    </AppContextProvider>
   );
 }
 

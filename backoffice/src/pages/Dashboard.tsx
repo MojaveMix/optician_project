@@ -10,7 +10,7 @@ export default function Dashboard() {
     const totalRevenue = payments.reduce((sum, p) => sum + p.amount, 0);
     const pendingOrders = orders.filter((o) => o.status === "PENDING").length;
     const lowStock = products.filter(
-      (p) => Number(p.stock_quantity ) <= Number(p.min_stock),
+      (p) => Number(p.stock_quantity) <= Number(p.min_stock),
     ).length;
     const deliveredOrders = orders.filter(
       (o) => o.status === "DELIVERED",
@@ -28,28 +28,27 @@ export default function Dashboard() {
       .slice(0, 5);
   }, [orders]);
 
-const monthlySales = useMemo(() => {
-  if (!orders) return [];
+  const monthlySales = useMemo(() => {
+    if (!orders) return [];
 
-  const salesByMonth = {};
+    const salesByMonth = {};
 
-  orders.forEach(order => {
-    const date = new Date(order.created_at);
-    const month = date.toLocaleString("default", { month: "short" });
+    orders.forEach((order) => {
+      const date = new Date(order.created_at);
+      const month = date.toLocaleString("default", { month: "short" });
 
-    if (!salesByMonth[month]) {
-      salesByMonth[month] = 0;
-    }
+      if (!salesByMonth[month]) {
+        salesByMonth[month] = 0;
+      }
 
-    salesByMonth[month] += order.total_price;
-  });
+      salesByMonth[month] += order.total_price;
+    });
 
-  return Object.keys(salesByMonth).map(month => ({
-    month,
-    amount: salesByMonth[month],
-  }));
-}, [orders]);
-
+    return Object.keys(salesByMonth).map((month) => ({
+      month,
+      amount: salesByMonth[month],
+    }));
+  }, [orders]);
 
   const maxAmount = Math.max(...monthlySales.map((m) => m.amount));
 
@@ -65,7 +64,7 @@ const monthlySales = useMemo(() => {
             <div>
               <p className="text-sm text-gray-500 mb-1">Total Revenue</p>
               <p className="text-2xl font-bold text-gray-800">
-                ${stats.totalRevenue}
+                ${parseFloat(stats?.totalRevenue || 0).toFixed(2)}
               </p>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">

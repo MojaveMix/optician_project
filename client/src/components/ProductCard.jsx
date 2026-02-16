@@ -1,13 +1,13 @@
-import { Star, ShoppingCart, Eye } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { generateWhatsAppOrderLink } from '../utils/whatsapp';
+import { Star, ShoppingCart, Eye } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { generateWhatsAppOrderLink } from "../utils/whatsapp";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
 
   const handleOrderWhatsApp = (e) => {
     e.stopPropagation();
-    window.open(generateWhatsAppOrderLink(product), '_blank');
+    window.open(generateWhatsAppOrderLink(product), "_blank");
   };
 
   const handleViewDetails = () => {
@@ -21,7 +21,11 @@ const ProductCard = ({ product }) => {
     >
       <div className="relative overflow-hidden h-64 bg-gray-100">
         <img
-          src={product.img_path ? import.meta.env.VITE_URL_IMG+product.id : "/img/glasses.jpeg"}
+          src={
+            product.img_path
+              ? import.meta.env.VITE_URL_IMG + product.id
+              : "/img/glasses.jpeg"
+          }
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
@@ -50,25 +54,31 @@ const ProductCard = ({ product }) => {
           </span>
         </div>
 
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
+        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+          {product.description}
+        </p>
 
         <div className="flex items-center mb-4">
           {[...Array(5)].map((_, index) => (
             <Star
               key={index}
               className={`w-4 h-4 ${
-                index < Math.floor(product.rating)
-                  ? 'text-yellow-400 fill-yellow-400'
-                  : 'text-gray-300'
+                index < Math.floor(product.rating || 4.8)
+                  ? "text-yellow-400 fill-yellow-400"
+                  : "text-gray-300"
               }`}
             />
           ))}
-          <span className="ml-2 text-sm text-gray-600">({product.rating})</span>
+          <span className="ml-2 text-sm text-gray-600">
+            ({product.rating || 4.8})
+          </span>
         </div>
 
         <div className="flex items-center justify-between pt-4 border-t">
           <div>
-            <span className="text-2xl font-bold text-[#1E3A8A]">{product.price}</span>
+            <span className="text-2xl font-bold text-[#1E3A8A]">
+              {product.selling_price}
+            </span>
             <span className="text-gray-600 ml-1">MAD</span>
           </div>
         </div>

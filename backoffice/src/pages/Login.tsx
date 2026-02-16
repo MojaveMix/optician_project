@@ -1,32 +1,32 @@
-import { useState, FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Eye } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import Input from '../components/Input';
-import Button from '../components/Button';
+import { useState, FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
+import { Eye } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import Input from "../components/Input";
+import Button from "../components/Button";
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
       const success = await login(email, password);
       if (success) {
-        navigate('/');
+        navigate("/");
       } else {
-        setError('Invalid email or password');
+        setError("Invalid email or password");
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
+      setError("An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -73,30 +73,10 @@ export default function Login() {
             required
           />
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={loading}
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Signing in..." : "Sign In"}
           </Button>
         </form>
-
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-          <p className="text-sm text-gray-700 font-medium mb-2">Demo Accounts:</p>
-          <div className="space-y-2 text-sm text-gray-600">
-            <div>
-              <p className="font-medium">Admin:</p>
-              <p>Email: admin@visionplus.com</p>
-              <p>Password: admin123</p>
-            </div>
-            <div>
-              <p className="font-medium">Seller:</p>
-              <p>Email: sarah@visionplus.com</p>
-              <p>Password: seller123</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

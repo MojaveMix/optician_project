@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { Plus, Eye, Mail, Phone, MapPin } from "lucide-react";
+import { Plus, Eye, Mail, Phone, MapPin, Trash2 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { Customer } from "../data/mockData";
 import Card from "../components/Card";
@@ -8,7 +8,7 @@ import Table from "../components/Table";
 import Modal from "../components/Modal";
 import Input from "../components/Input";
 import Badge from "../components/Badge";
-import { GetMethod, PostMethod } from "../api/methods";
+import { GetMethod, PostMethod, PutMethod } from "../api/methods";
 
 export default function Customers() {
   const { prescriptions, orders } = useApp();
@@ -18,6 +18,8 @@ export default function Customers() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
     null,
   );
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   const [formData, setFormData] = useState({
     shop_id: "1",
     full_name: "",
@@ -26,6 +28,11 @@ export default function Customers() {
     address: "",
     birth_date: "",
   });
+
+  const openDeleteModal = (customer: Customer) => {
+    setSelectedCustomer(customer);
+    setIsDeleteModalOpen(true);
+  };
 
   const fetchAllCustomers = useCallback(async () => {
     try {
@@ -36,6 +43,16 @@ export default function Customers() {
     }
   }, []);
 
+  const handleDelete = async () => {
+    if (selectedCustomer) {
+      await PutMethod("/customers/delete", {
+        id: selectedCustomer?.id,
+      });
+      fetchAllCustomers();
+      setIsDeleteModalOpen(false);
+      setSelectedCustomer(null);
+    }
+  };
   const handleAdd = async () => {
     await PostMethod("/customers/create", formData);
     fetchAllCustomers();
@@ -98,14 +115,28 @@ export default function Customers() {
     {
       header: "Actions",
       accessor: (row: Customer) => (
-        <Button
-          size="sm"
-          className="flex items-center"
-          onClick={() => openViewModal(row)}
-        >
-          <Eye className="w-4 h-4 mr-1" />
-          View Profile
-        </Button>
+        <div className="flex items-center gap-3 ">
+          <Button
+            size="sm"
+            className="flex items-center"
+            onClick={() => openViewModal(row)}
+          >
+            <Eye className="w-4 h-4 mr-1" />
+            View Profile
+          </Button>
+          <Button
+            size="sm"
+            variant="danger"
+            onClick={(e) => {
+              e.stopPropagation();
+              openDeleteModal(row);
+            }}
+            className="p-1.5 md:p-2 hover:bg-red-50 transition-colors duration-200"
+            aria-label="Delete product"
+          >
+            <Trash2 className="w-3 h-3 md:w-4 md:h-4" />
+          </Button>
+        </div>
       ),
     },
   ];
@@ -332,6 +363,35 @@ export default function Customers() {
             </div>
           </div>
         )}
+      </Modal>
+
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setSelectedCustomer(null);
+        }}
+        title="Delete Product"
+      >
+        <p className="text-gray-700 mb-6">
+          Are you sure you want to delete {selectedCustomer?.full_name}? This
+          action cannot be undone.
+        </p>
+        <div className="flex gap-3">
+          <Button variant="danger" onClick={handleDelete} className="flex-1">
+            Delete
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setIsDeleteModalOpen(false);
+              setSelectedCustomer(null);
+            }}
+            className="flex-1"
+          >
+            Cancel
+          </Button>
+        </div>
       </Modal>
     </div>
   );

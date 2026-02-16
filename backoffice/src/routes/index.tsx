@@ -1,17 +1,17 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from '../pages/Login';
-import Dashboard from '../pages/Dashboard';
-import Products from '../pages/Products';
-import Customers from '../pages/Customers';
-import Prescriptions from '../pages/Prescriptions';
-import Orders from '../pages/Orders';
-import Reports from '../pages/Reports';
-import MainLayout from '../layouts/MainLayout';
-import { useAuth } from '../context/AuthContext';
+import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "../pages/Login";
+import Dashboard from "../pages/Dashboard";
+import Products from "../pages/Products";
+import Customers from "../pages/Customers";
+import Prescriptions from "../pages/Prescriptions";
+import Orders from "../pages/Orders";
+import Reports from "../pages/Reports";
+import MainLayout from "../layouts/MainLayout";
+import { useAuth } from "../context/AuthContext";
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
-  return user ? <>{children}</> : <Navigate to="/login" replace />;
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
 }
 
 export default function AppRoutes() {

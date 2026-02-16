@@ -1,70 +1,75 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
-import { User } from '../data/mockData';
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useCallback,
+  useEffect,
+} from "react";
+import { User } from "../data/mockData";
+import { GetMethod, PostMethod } from "../api/methods";
+import { decodeUserToken, isTokenExpired } from "../utils/DecodeTokenJwt";
 
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(() => {
-    const savedUser = localStorage.getItem('user');
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+  const [user, setUser] = useState<User | null>(null);
+  const token = localStorage.getItem("userToken");
 
+  const isAuthenticated = token ? !isTokenExpired(token) : false;
   const login = async (email: string, password: string): Promise<boolean> => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    try {
+      const data = await PostMethod("/auth/login", {
+        email,
+        password,
+      });
 
-    const mockUsers = [
-      {
-        id: '1',
-        shop_id: '1',
-        full_name: 'John Anderson',
-        email: 'admin@visionplus.com',
-        password: 'admin123',
-        role: 'ADMIN' as const,
-        phone: '+1-555-0102',
-        is_active: true,
-        created_at: '2024-01-15T10:00:00Z',
-      },
-      {
-        id: '2',
-        shop_id: '1',
-        full_name: 'Sarah Miller',
-        email: 'sarah@visionplus.com',
-        password: 'seller123',
-        role: 'SELLER' as const,
-        phone: '+1-555-0103',
-        is_active: true,
-        created_at: '2024-01-20T10:00:00Z',
-      },
-    ];
+      if (data?.token) {
+        localStorage.setItem("userToken", data?.token);
+        setUser(data?.user);
+        return true;
+      }
 
-    const foundUser = mockUsers.find(
-      (u) => u.email === email && u.password === password
-    );
-
-    if (foundUser) {
-      const userWithoutPassword = { ...foundUser };
-      delete (userWithoutPassword as { password?: string }).password;
-      setUser(userWithoutPassword as User);
-      localStorage.setItem('user', JSON.stringify(userWithoutPassword));
-      return true;
+      return false;
+    } catch (error) {
+      console.error(error);
+      return false;
     }
-
-    return false;
   };
+
+  const fetchUserById = useCallback(async () => {
+    try {
+      if (!isTokenExpired(token)) {
+        const decodedToken = decodeUserToken(token) as any;
+        if (decodedToken?.id) {
+          const data = await GetMethod(`/user/${decodedToken?.id}`);
+          setUser(data);
+          console.log(data);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    fetchUserById();
+  }, [fetchUserById]);
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
+    localStorage.removeItem("userToken");
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
@@ -73,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
+    throw new Error("useAuth must be used within AuthProvider");
   }
   return context;
 }

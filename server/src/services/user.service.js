@@ -2,8 +2,24 @@ const { QuerySql } = require("./query.service");
 
 const findUser = async (email) => {
   try {
-    const data = await QuerySql("SELECT * FROM users where email = ?", [email]);
+    const data = await QuerySql(
+      "SELECT * FROM users where email = ? and casher > 0",
+      [email],
+    );
 
+    return data ? data : null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+const findUserById = async (id) => {
+  try {
+    const data = await QuerySql(
+      "SELECT id, full_name, email, role, phone, is_active, created_at  FROM users where id = ?",
+      [id],
+    );
     return data ? data : null;
   } catch (error) {
     console.error(error);
@@ -25,4 +41,4 @@ const CreateUser = async (bodies = []) => {
   }
 };
 
-module.exports = { findUser, CreateUser };
+module.exports = { findUser, CreateUser, findUserById };

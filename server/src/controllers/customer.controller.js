@@ -3,6 +3,7 @@ const {
   updateCustomer,
   CreateCustomer,
 } = require("../services/customers.service");
+const { QuerySql } = require("../services/query.service");
 
 const showAllCustomersController = async (req, res) => {
   try {
@@ -11,6 +12,17 @@ const showAllCustomersController = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).send({ error: "Internale server problem" });
+  }
+};
+
+const DeleteCustomersController = async (req, res) => {
+  try {
+    const { id } = req.body;
+    await QuerySql("UPDATE customers set casher = -1 where id = ?", [id]);
+    res.json({ success: "Customer deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "Internale server problem" });
   }
 };
 
@@ -49,4 +61,5 @@ module.exports = {
   showAllCustomersController,
   updateCustomersController,
   createCustomersController,
+  DeleteCustomersController,
 };

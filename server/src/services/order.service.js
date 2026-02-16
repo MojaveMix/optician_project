@@ -2,7 +2,10 @@ const { QuerySql, QuerySqlInsertedId } = require("./query.service");
 
 const showOrder = async (bodies = []) => {
   try {
-    const data = await QuerySql("SELECT * FROM  orders", bodies);
+    const data = await QuerySql(
+      "SELECT * FROM  orders where casher > 0",
+      bodies,
+    );
     return data ? data : null;
   } catch (error) {
     console.error(error);

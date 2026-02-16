@@ -8,6 +8,7 @@ export default defineConfig({
     exclude: ["lucide-react"],
   },
   server: {
-    host: true,
+    port: 5002,
+    // host: true,
   },
 });

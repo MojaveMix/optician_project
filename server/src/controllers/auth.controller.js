@@ -1,5 +1,9 @@
 const bcrypt = require("bcryptjs");
-const { findUser, CreateUser } = require("../services/user.service");
+const {
+  findUser,
+  CreateUser,
+  findUserById,
+} = require("../services/user.service");
 const jwt = require("jsonwebtoken");
 
 const authController = async (req, res) => {
@@ -42,6 +46,19 @@ const authController = async (req, res) => {
   }
 };
 
+const findUserByIdController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const data = await findUserById(id);
+
+    return res.json(data.length > 0 ? data[0] : {});
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ error: "Internale server problem" });
+  }
+};
+
 const RegisterController = async (req, res) => {
   try {
     const { full_name, email, password, role, phone } = req.body;
@@ -61,4 +78,4 @@ const RegisterController = async (req, res) => {
   }
 };
 
-module.exports = { authController, RegisterController };
+module.exports = { authController, RegisterController, findUserByIdController };

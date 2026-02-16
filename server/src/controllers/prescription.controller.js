@@ -2,6 +2,7 @@ const {
   showPrescription,
   CreatePrescription,
 } = require("../services/prescription.service");
+const { QuerySql } = require("../services/query.service");
 
 const showAllPrescriptionController = async (req, res) => {
   try {
@@ -10,6 +11,17 @@ const showAllPrescriptionController = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).send({ error: "Internale server problem" });
+  }
+};
+
+const DeletePrescriptionController = async (req, res) => {
+  try {
+    const { id } = req.body;
+    await QuerySql("UPDATE prescriptions set casher = -1 where id = ?", [id]);
+    res.json({ success: "Prescription deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "Internale server problem" });
   }
 };
 
@@ -51,4 +63,5 @@ const createPrescriptionController = async (req, res) => {
 module.exports = {
   createPrescriptionController,
   showAllPrescriptionController,
+  DeletePrescriptionController,
 };
