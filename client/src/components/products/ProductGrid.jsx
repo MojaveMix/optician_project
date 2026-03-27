@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
 import ProductCard from "./ProductCard";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../../context/AppContext";
 
 const ProductGrid = () => {
   const [searchTerm, setSearchTerm] = useState("");

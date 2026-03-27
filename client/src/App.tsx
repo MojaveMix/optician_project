@@ -1,8 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import ProductPage from './pages/ProductPage';
-import AppContextProvider from './context/AppContext';
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import ProductPage from "./pages/ProductPage";
+import AppContextProvider from "./context/AppContext";
 
 function App() {
   return (

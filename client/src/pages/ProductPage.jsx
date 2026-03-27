@@ -28,6 +28,7 @@ const ProductPage = () => {
     try {
       const data = await GetMethod(`/products/show/${id}`);
       setProduct(data);
+      console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -37,7 +38,7 @@ const ProductPage = () => {
     fetchProductById();
   }, [fetchProductById]);
 
-  if (!product) {
+  if (Object.entries(product).length == 0) {
     return (
       <>
         <Navbar />
@@ -233,62 +234,6 @@ const ProductPage = () => {
 
                   <p className="text-sm text-gray-500 text-center mt-4">
                     Click to complete your order through WhatsApp
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-12 bg-white rounded-2xl shadow-lg p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Product Features
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="flex items-start space-x-3">
-                <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">
-                    Premium Materials
-                  </h3>
-                  <p className="text-gray-600">
-                    Crafted from high-quality materials for lasting durability
-                    and comfort.
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">
-                    UV Protection
-                  </h3>
-                  <p className="text-gray-600">
-                    Complete protection against harmful UV rays for your eye
-                    health.
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">
-                    Professional Fitting
-                  </h3>
-                  <p className="text-gray-600">
-                    Expert assistance available for perfect fitting and
-                    adjustment.
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">
-                    Warranty Coverage
-                  </h3>
-                  <p className="text-gray-600">
-                    Comprehensive warranty for manufacturing defects and quality
-                    issues.
                   </p>
                 </div>
               </div>

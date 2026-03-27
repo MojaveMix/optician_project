@@ -1,13 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
-import Products from "../pages/Products";
-import Customers from "../pages/Customers";
+import Customers from "../pages/customers/Customers";
 import Prescriptions from "../pages/Prescriptions";
 import Orders from "../pages/Orders";
 import Reports from "../pages/Reports";
 import MainLayout from "../layouts/MainLayout";
 import { useAuth } from "../context/AuthContext";
+import Products from "../pages/products/Products";
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();

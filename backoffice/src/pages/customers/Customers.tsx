@@ -1,19 +1,21 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { Plus, Eye, Mail, Phone, MapPin, Trash2 } from "lucide-react";
-import { useApp } from "../context/AppContext";
-import { Customer } from "../data/mockData";
-import Card from "../components/Card";
-import Button from "../components/Button";
-import Table from "../components/Table";
-import Modal from "../components/Modal";
-import Input from "../components/Input";
-import Badge from "../components/Badge";
-import { GetMethod, PostMethod, PutMethod } from "../api/methods";
+import { Plus, Eye, Mail, Phone, MapPin, Trash2, Edit2 } from "lucide-react";
+import { useApp } from "../../context/AppContext";
+import { Customer } from "../../data/mockData";
+import Card from "../../components/Card";
+import Button from "../../components/Button";
+import Table from "../../components/Table";
+import Modal from "../../components/Modal";
+import Badge from "../../components/Badge";
+import { GetMethod, PutMethod } from "../../api/methods";
+import CreateCustomers from "./CreateCustomers";
+import EditCustomers from "./EditCustomers";
 
 export default function Customers() {
   const { prescriptions, orders } = useApp();
   const [customers, setCustomers] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
     null,
@@ -21,7 +23,7 @@ export default function Customers() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [formData, setFormData] = useState({
-    shop_id: "1",
+    id: "",
     full_name: "",
     phone: "",
     email: "",
@@ -32,6 +34,19 @@ export default function Customers() {
   const openDeleteModal = (customer: Customer) => {
     setSelectedCustomer(customer);
     setIsDeleteModalOpen(true);
+  };
+
+  const openUpdateModal = (customer: Customer) => {
+    setSelectedCustomer(customer);
+    setFormData({
+      id: String(customer.id),
+      full_name: customer.full_name,
+      phone: customer.phone,
+      email: customer.email,
+      address: customer.address,
+      birth_date: customer.birth_date,
+    });
+    setIsEditModalOpen(true);
   };
 
   const fetchAllCustomers = useCallback(async () => {
@@ -53,12 +68,6 @@ export default function Customers() {
       setSelectedCustomer(null);
     }
   };
-  const handleAdd = async () => {
-    await PostMethod("/customers/create", formData);
-    fetchAllCustomers();
-    setIsAddModalOpen(false);
-    resetForm();
-  };
 
   useEffect(() => {
     fetchAllCustomers();
@@ -71,7 +80,7 @@ export default function Customers() {
 
   const resetForm = () => {
     setFormData({
-      shop_id: "1",
+      id: "",
       full_name: "",
       phone: "",
       email: "",
@@ -82,12 +91,16 @@ export default function Customers() {
 
   const customerPrescriptions = useMemo(() => {
     if (!selectedCustomer) return [];
-    return prescriptions.filter((p) => p.customer_id === selectedCustomer.id);
+    return prescriptions.filter(
+      (p) => Number(p.customer_id) === Number(selectedCustomer.id),
+    );
   }, [selectedCustomer, prescriptions]);
 
   const customerOrders = useMemo(() => {
     if (!selectedCustomer) return [];
-    return orders.filter((o) => o.customer_id === selectedCustomer.id);
+    return orders.filter(
+      (o) => Number(o.customer_id) === Number(selectedCustomer.id),
+    );
   }, [selectedCustomer, orders]);
 
   const columns = [
@@ -126,13 +139,25 @@ export default function Customers() {
           </Button>
           <Button
             size="sm"
+            variant="secondary"
+            onClick={(e) => {
+              e.stopPropagation();
+              openUpdateModal(row);
+            }}
+            className="p-1.5 md:p-2 hover:bg-red-50 transition-colors duration-200"
+            aria-label="update customer"
+          >
+            <Edit2 className="w-3 h-3 md:w-4 md:h-4" />
+          </Button>
+          <Button
+            size="sm"
             variant="danger"
             onClick={(e) => {
               e.stopPropagation();
               openDeleteModal(row);
             }}
             className="p-1.5 md:p-2 hover:bg-red-50 transition-colors duration-200"
-            aria-label="Delete product"
+            aria-label="Delete customer"
           >
             <Trash2 className="w-3 h-3 md:w-4 md:h-4" />
           </Button>
@@ -164,68 +189,28 @@ export default function Customers() {
         title="Add New Customer"
         size="lg"
       >
-        <div className="grid grid-cols-2 gap-4">
-          <Input
-            label="Full Name"
-            value={formData.full_name}
-            onChange={(e) =>
-              setFormData({ ...formData, full_name: e.target.value })
-            }
-            required
-          />
-          <Input
-            label="Phone"
-            value={formData.phone}
-            onChange={(e) =>
-              setFormData({ ...formData, phone: e.target.value })
-            }
-            required
-          />
-          <Input
-            label="Email"
-            type="email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-            required
-          />
-          <Input
-            label="Birth Date"
-            type="date"
-            value={formData.birth_date}
-            onChange={(e) =>
-              setFormData({ ...formData, birth_date: e.target.value })
-            }
-            required
-          />
+        <CreateCustomers
+          formData={formData}
+          fetchAllCustomers={fetchAllCustomers}
+          setIsAddModalOpen={setIsAddModalOpen}
+          setFormData={setFormData}
+        />
+      </Modal>
 
-          <div className="col-span-2">
-            <Input
-              label="Address"
-              value={formData.address}
-              onChange={(e) =>
-                setFormData({ ...formData, address: e.target.value })
-              }
-              required
-            />
-          </div>
-        </div>
-        <div className="flex gap-3 mt-6">
-          <Button onClick={handleAdd} className="flex-1">
-            Add Customer
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setIsAddModalOpen(false);
-              resetForm();
-            }}
-            className="flex-1"
-          >
-            Cancel
-          </Button>
-        </div>
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+        }}
+        title="Update Customer"
+        size="lg"
+      >
+        <EditCustomers
+          formData={formData}
+          fetchAllCustomers={fetchAllCustomers}
+          setIsUpdateModalOpen={setIsEditModalOpen}
+          setFormData={setFormData}
+        />
       </Modal>
 
       <Modal

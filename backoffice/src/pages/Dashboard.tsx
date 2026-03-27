@@ -31,7 +31,7 @@ export default function Dashboard() {
   const monthlySales = useMemo(() => {
     if (!orders) return [];
 
-    const salesByMonth = {};
+    const salesByMonth: Record<string, number> = {};
 
     orders.forEach((order) => {
       const date = new Date(order.created_at);
@@ -64,7 +64,7 @@ export default function Dashboard() {
             <div>
               <p className="text-sm text-gray-500 mb-1">Total Revenue</p>
               <p className="text-2xl font-bold text-gray-800">
-                ${parseFloat(stats?.totalRevenue || 0).toFixed(2)}
+                ${parseFloat(String(stats?.totalRevenue || 0)).toFixed(2)}
               </p>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
