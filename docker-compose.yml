@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  server:
+    build: ./server
+    container_name: optician_server
+    ports:
+      - "8000:8000"
+    restart: always
+    networks:
+      - optician-network
+
+  client:
+    build: ./client
+    container_name: optician_client
+    ports:
+      - "3000:80"
+    depends_on:
+      - server
+    restart: always
+    networks:
+      - optician-network
+
+  backoffice:
+    build: ./backoffice
+    container_name: optician_backoffice
+    ports:
+      - "4000:80"
+    depends_on:
+      - server
+    restart: always
+    networks:
+      - optician-network
+
+networks:
+  optician-network:
