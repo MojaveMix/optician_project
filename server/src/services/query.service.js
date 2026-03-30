@@ -1,27 +1,17 @@
-const db = require("../config/db");
+const { createDb } = require("../config/db");
 
-const QuerySql = (query, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.query(query, params, (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
-  });
+const QuerySql = async (query, params = []) => {
+  const db = await createDb();
+
+  const [rows] = await db.execute(query, params);
+  return rows;
 };
 
-const QuerySqlInsertedId = (query, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.query(query, params, (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res.insertId);
-      }
-    });
-  });
+const QuerySqlInsertedId = async (query, params = []) => {
+  const db = await createDb();
+
+  const [result] = await db.execute(query, params);
+  return result.insertId;
 };
 
 module.exports = { QuerySql, QuerySqlInsertedId };
