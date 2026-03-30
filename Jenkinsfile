@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_COMPOSE = "/usr/local/bin/docker-compose"
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -15,8 +11,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                         bat 'docker-compose build --no-cache'
-
+                    bat 'docker-compose build --no-cache'
                 }
             }
         }
@@ -24,24 +19,28 @@ pipeline {
         stage('Run Containers') {
             steps {
                 script {
-                    sh 'docker-compose up -d'
+                    bat 'docker-compose up -d'
                 }
             }
         }
 
         stage('API Tests') {
             steps {
-                //  sh 'docker-compose run --rm server npm test'
-                         sh 'docker-compose exec -T server curl http://localhost:8000/api/health'
-
-                  }
+                script {
+                    // Test the health endpoint of your server
+                    bat 'docker-compose exec server curl http://localhost:8000/api/health'
+                }
+            }
         }
 
-  stage('Cleanup') {
-    steps {
-        sh 'docker-compose down || true'
-    }
-}
+        stage('Cleanup') {
+            steps {
+                script {
+                    // Stop containers, ignore errors if already stopped
+                    bat 'docker-compose down || exit 0'
+                }
+            }
+        }
     }
 
     post {
